@@ -28,7 +28,7 @@ Generative AI Applications · Education Technology
 
 ## Live Demo
 
-[Add your GitHub Pages link here once enabled]
+https://shahidlubna996-debug.github.io/StudyMate_AI/
 
 ## Author
 
