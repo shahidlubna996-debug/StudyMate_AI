@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StudyMate AI — Your Study Companion</title>
+<script src="https://js.puter.com/v2/"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- <div class="brand">
+    <span class="brand-mark">v1.0</span>
+  </div> -->
+  <h1>StudyMate AI</h1>
+  <p class="tagline">Explain a concept, generate a practice quiz, or summarize your notes — powered by AI, built for students.</p>
+
+  <div class="notebook">
+    <div class="tabs">
+      <button class="tab active" data-tab="explain">Explain This</button>
+      <button class="tab" data-tab="quiz">Quiz Me</button>
+      <button class="tab" data-tab="summarize">Summarize Notes</button>
+    </div>
+
+    <!-- EXPLAIN PANEL -->
+    <div class="panel active" id="panel-explain">
+      <h2>Explain a topic simply</h2>
+      <p class="desc">Type any concept you're stuck on. You'll get a plain-language explanation with a simple example.</p>
+      <div class="chips">
+        <span class="chip" onclick="fillTopic('explain-input','Modular exponentiation')">Modular exponentiation</span>
+        <span class="chip" onclick="fillTopic('explain-input','Geometric distribution')">Geometric distribution</span>
+        <span class="chip" onclick="fillTopic('explain-input','Photosynthesis')">Photosynthesis</span>
+      </div>
+      <div class="row">
+        <input type="text" id="explain-input" placeholder="e.g. Bayes' theorem" />
+        <button class="go" onclick="explainTopic()">Explain</button>
+      </div>
+      <div class="output" id="explain-output"></div>
+    </div>
+
+    <!-- QUIZ PANEL -->
+    <div class="panel" id="panel-quiz">
+      <h2>Generate a practice quiz</h2>
+      <p class="desc">Type a topic and get 5 multiple-choice questions to test yourself. Click an option to check your answer.</p>
+      <div class="chips">
+        <span class="chip" onclick="fillTopic('quiz-input','Graph theory basics')">Graph theory basics</span>
+        <span class="chip" onclick="fillTopic('quiz-input','C++ pointers')">C++ pointers</span>
+        <span class="chip" onclick="fillTopic('quiz-input','Erosion and ecosystems')">Erosion and ecosystems</span>
+      </div>
+      <div class="row">
+        <input type="text" id="quiz-input" placeholder="e.g. Probability distributions" />
+        <button class="go" onclick="generateQuiz()">Generate Quiz</button>
+      </div>
+      <div class="output" id="quiz-output"></div>
+    </div>
+
+    <!-- SUMMARIZE PANEL -->
+    <div class="panel" id="panel-summarize">
+      <h2>Summarize your notes</h2>
+      <p class="desc">Paste messy lecture notes below. You'll get a clean summary with the key points pulled out.</p>
+      <textarea id="notes-input" placeholder="Paste your notes here..."></textarea>
+      <div class="row" style="margin-top:10px;">
+        <button class="go" onclick="summarizeNotes()">Summarize</button>
+      </div>
+      <div class="output" id="summarize-output"></div>
+    </div>
+  </div>
+
+  <!-- <footer>Built with Puter.js — no API keys, no backend</footer> -->
+
+  <script src="script.js"></script>
+</body>
+</html>
