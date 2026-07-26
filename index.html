@@ -3,75 +3,194 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>StudyMate AI — Your Study Companion</title>
+<title>StudyMate AI</title>
+
+<!-- This one script gives us free access to AI models (Claude) right in the browser.
+     No API key needed, no backend server needed. -->
 <script src="https://js.puter.com/v2/"></script>
+
+<!-- Fonts from Google Fonts: a handwriting-style font for headings (Kalam / Caveat)
+     since the whole app is styled like a chalkboard, plus a normal readable font (Inter)
+     for the actual AI answers, and a monospace font for small labels. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Kalam:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- <div class="brand">
-    <span class="brand-mark">v1.0</span>
-  </div> -->
+  <!-- Page header -->
+  <p class="brand-mark">v1.0</p>
   <h1>StudyMate AI</h1>
-  <p class="tagline">Explain a concept, generate a practice quiz, or summarize your notes — powered by AI, built for students.</p>
+  <p class="tagline">
+    Explain a concept, generate a practice quiz, or summarize your notes — powered by AI, built for students.
+  </p>
 
+  <!-- Quote of the day box. This gets filled in by script.js using a free quotes API. -->
   <div class="quote-banner" id="quote-banner">
     <span class="quote-loading">Loading today's quote...</span>
   </div>
 
-  <div class="notebook">
-    <div class="tabs">
-      <button class="tab active" data-tab="explain">Explain This</button>
-      <button class="tab" data-tab="quiz">Quiz Me</button>
-      <button class="tab" data-tab="summarize">Summarize Notes</button>
+  <!-- This wraps the planner (left), the main app (middle), and the
+       brain break game + links (right) into one row, so the empty
+       space on wide screens actually gets used for something. -->
+  <div class="page-wrap">
+
+    <!-- LEFT SIDEBAR: Study Planner -->
+    <aside class="sidebar sidebar-left">
+      <div class="widget">
+        <h3>📅 Study Planner</h3>
+        <p class="widget-desc">Your tasks are saved in this browser, even after you close the tab.</p>
+        <div class="planner-row">
+          <input type="text" id="planner-input" placeholder="Add a task..." />
+          <button id="planner-add-btn">+</button>
+        </div>
+        <ul class="planner-list" id="planner-list"></ul>
+      </div>
+
+      <div class="widget">
+        <h3>🎯 NEET & UPSC Prep</h3>
+        <p class="widget-desc">Study techniques and free courses for competitive exam prep.</p>
+        <a class="link-card" href="https://ncert.nic.in" target="_blank" rel="noopener">
+          <span class="link-emoji">📗</span>
+          <span class="link-text"><strong>NCERT (Official)</strong>Free textbooks — the base for NEET prep</span>
+        </a>
+        <a class="link-card" href="https://neet.nta.nic.in" target="_blank" rel="noopener">
+          <span class="link-emoji">🩺</span>
+          <span class="link-text"><strong>NEET — NTA Official</strong>Syllabus, dates, and exam pattern</span>
+        </a>
+        <a class="link-card" href="https://www.clearias.com" target="_blank" rel="noopener">
+          <span class="link-emoji">📝</span>
+          <span class="link-text"><strong>ClearIAS</strong>Free UPSC strategy and study material</span>
+        </a>
+        <a class="link-card" href="https://upsc.gov.in" target="_blank" rel="noopener">
+          <span class="link-emoji">🏛️</span>
+          <span class="link-text"><strong>UPSC (Official)</strong>Syllabus, notifications, and previous papers</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main app card, styled like a notebook page -->
+    <div class="notebook">
+
+      <!-- These 3 buttons switch between the 3 features. The JavaScript at the
+           bottom of the page listens for clicks on them. -->
+      <div class="tabs">
+        <button class="tab active" data-tab="explain">💡 Explain This</button>
+        <button class="tab" data-tab="quiz">🧠 Quiz Me</button>
+        <button class="tab" data-tab="summarize">✍️ Summarize Notes</button>
+        <button class="tab" data-tab="career">🧭 Career Advisor</button>
+      </div>
+
+      <!-- FEATURE 1: Explain a topic -->
+      <div class="panel active" id="panel-explain">
+        <h2>Explain a topic simply</h2>
+        <p class="desc">Type any concept you're stuck on. You'll get a plain-language explanation with a simple example and a related picture.</p>
+
+        <!-- Quick example buttons so you don't have to type anything to try it out -->
+        <div class="chips">
+          <span class="chip" onclick="fillTopic('explain-input','Modular exponentiation')">Modular exponentiation</span>
+          <span class="chip" onclick="fillTopic('explain-input','Geometric distribution')">Geometric distribution</span>
+          <span class="chip" onclick="fillTopic('explain-input','Photosynthesis')">Photosynthesis</span>
+        </div>
+
+        <div class="row">
+          <input type="text" id="explain-input" placeholder="e.g. Bayes' theorem" />
+          <button class="go" onclick="explainTopic()">Explain</button>
+        </div>
+
+        <!-- The AI's answer gets put inside this empty div by script.js -->
+        <div class="output" id="explain-output"></div>
+      </div>
+
+      <!-- FEATURE 2: Quiz generator -->
+      <div class="panel" id="panel-quiz">
+        <h2>Generate a practice quiz</h2>
+        <p class="desc">Type a topic and get 5 multiple-choice questions to test yourself. Click an option to check your answer.</p>
+
+        <div class="chips">
+          <span class="chip" onclick="fillTopic('quiz-input','Graph theory basics')">Graph theory basics</span>
+          <span class="chip" onclick="fillTopic('quiz-input','C++ pointers')">C++ pointers</span>
+          <span class="chip" onclick="fillTopic('quiz-input','Erosion and ecosystems')">Erosion and ecosystems</span>
+        </div>
+
+        <div class="row">
+          <input type="text" id="quiz-input" placeholder="e.g. Probability distributions" />
+          <button class="go" onclick="generateQuiz()">Generate Quiz</button>
+        </div>
+
+        <div class="output" id="quiz-output"></div>
+      </div>
+
+      <!-- FEATURE 3: Summarize notes -->
+      <div class="panel" id="panel-summarize">
+        <h2>Summarize your notes</h2>
+        <p class="desc">Paste messy lecture notes below. You'll get a clean summary with the key points pulled out.</p>
+
+        <textarea id="notes-input" placeholder="Paste your notes here..."></textarea>
+        <div class="row" style="margin-top:10px;">
+          <button class="go" onclick="summarizeNotes()">Summarize</button>
+        </div>
+
+        <div class="output" id="summarize-output"></div>
+      </div>
+
+      <!-- FEATURE 4: Career Advisor -->
+      <div class="panel" id="panel-career">
+        <h2>Confused about your career?</h2>
+        <p class="desc">Tell me about your interests, the subjects you enjoy (or don't), and what's on your mind. I'll suggest a few career paths that could genuinely fit you, and why.</p>
+
+        <!-- Quick starting points, in case it's hard to know where to begin -->
+        <div class="chips">
+          <span class="chip" onclick="fillTopic('career-input','I enjoy solving math and logic problems but I am not sure what career uses that')">I like solving problems</span>
+          <span class="chip" onclick="fillTopic('career-input','I like helping and talking to people more than working alone with data')">I like helping people</span>
+          <span class="chip" onclick="fillTopic('career-input','I enjoy building, designing, or fixing things with my hands or on a computer')">I like building things</span>
+        </div>
+
+        <textarea id="career-input" placeholder="e.g. I enjoy coding and math, but I also like biology. I don't know if I should aim for engineering or medicine..."></textarea>
+        <div class="row" style="margin-top:10px;">
+          <button class="go" onclick="getCareerAdvice()">Get Career Guidance</button>
+        </div>
+
+        <div class="output" id="career-output"></div>
+      </div>
+
     </div>
 
-    <!-- EXPLAIN PANEL -->
-    <div class="panel active" id="panel-explain">
-      <h2>Explain a topic simply</h2>
-      <p class="desc">Type any concept you're stuck on. You'll get a plain-language explanation with a simple example.</p>
-      <div class="chips">
-        <span class="chip" onclick="fillTopic('explain-input','Modular exponentiation')">Modular exponentiation</span>
-        <span class="chip" onclick="fillTopic('explain-input','Geometric distribution')">Geometric distribution</span>
-        <span class="chip" onclick="fillTopic('explain-input','Photosynthesis')">Photosynthesis</span>
+    <!-- RIGHT SIDEBAR: Brain Break game + Useful Links -->
+    <aside class="sidebar sidebar-right">
+      <div class="widget">
+        <h3>🎮 Brain Break</h3>
+        <p class="widget-desc">Flip 2 cards to find a match. A quick break helps you focus better after.</p>
+        <div class="memory-grid" id="memory-grid"></div>
+        <p class="memory-status" id="memory-status">Matches: 0 / 4</p>
+        <button class="mini-btn" onclick="startMemoryGame()">🔄 New Game</button>
       </div>
-      <div class="row">
-        <input type="text" id="explain-input" placeholder="e.g. Bayes' theorem" />
-        <button class="go" onclick="explainTopic()">Explain</button>
-      </div>
-      <div class="output" id="explain-output"></div>
-    </div>
 
-    <!-- QUIZ PANEL -->
-    <div class="panel" id="panel-quiz">
-      <h2>Generate a practice quiz</h2>
-      <p class="desc">Type a topic and get 5 multiple-choice questions to test yourself. Click an option to check your answer.</p>
-      <div class="chips">
-        <span class="chip" onclick="fillTopic('quiz-input','Graph theory basics')">Graph theory basics</span>
-        <span class="chip" onclick="fillTopic('quiz-input','C++ pointers')">C++ pointers</span>
-        <span class="chip" onclick="fillTopic('quiz-input','Erosion and ecosystems')">Erosion and ecosystems</span>
+      <div class="widget">
+        <h3>🔗 Useful Links</h3>
+        <a class="link-card" href="https://www.khanacademy.org" target="_blank" rel="noopener">
+          <span class="link-emoji">🎥</span>
+          <span class="link-text"><strong>Khan Academy</strong>Free video lessons on any subject</span>
+        </a>
+        <a class="link-card" href="https://www.wolframalpha.com" target="_blank" rel="noopener">
+          <span class="link-emoji">🧮</span>
+          <span class="link-text"><strong>Wolfram Alpha</strong>Step-by-step math solver</span>
+        </a>
+        <a class="link-card" href="https://scholar.google.com" target="_blank" rel="noopener">
+          <span class="link-emoji">📄</span>
+          <span class="link-text"><strong>Google Scholar</strong>Search real academic papers</span>
+        </a>
+        <a class="link-card" href="https://quizlet.com" target="_blank" rel="noopener">
+          <span class="link-emoji">🗂️</span>
+          <span class="link-text"><strong>Quizlet</strong>Flashcards for any topic</span>
+        </a>
       </div>
-      <div class="row">
-        <input type="text" id="quiz-input" placeholder="e.g. Probability distributions" />
-        <button class="go" onclick="generateQuiz()">Generate Quiz</button>
-      </div>
-      <div class="output" id="quiz-output"></div>
-    </div>
+    </aside>
 
-    <!-- SUMMARIZE PANEL -->
-    <div class="panel" id="panel-summarize">
-      <h2>Summarize your notes</h2>
-      <p class="desc">Paste messy lecture notes below. You'll get a clean summary with the key points pulled out.</p>
-      <textarea id="notes-input" placeholder="Paste your notes here..."></textarea>
-      <div class="row" style="margin-top:10px;">
-        <button class="go" onclick="summarizeNotes()">Summarize</button>
-      </div>
-      <div class="output" id="summarize-output"></div>
-    </div>
   </div>
 
+  <footer>Built with Puter.js — no API keys, no backend needed</footer>
 
   <script src="script.js"></script>
 </body>

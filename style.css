@@ -1,343 +1,649 @@
+/* =========================================================
+   StudyMate AI — styles
+   Theme idea: it should feel like a chalkboard in a classroom.
+   Dark charcoal background = chalkboard, off-white text = chalk,
+   and 4 "chalk colors" (yellow / blue / coral / lavender), one
+   per feature tab.
+   ========================================================= */
+
 :root{
-  --bg: #16211D;
-  --card: #1D2B24;
-  --card-raised: #24352C;
-  --ink: #F2EFE6;
-  --ink-dim: #A9B2BF;
-  --muted: #7C8797;
-  --amber: #F4C95D;
-  --teal: #4FB6A9;
-  --rule: rgba(242,239,230,0.08);
-  --margin-red: #D96C6C;
-  --radius: 14px;
+  /* background colors */
+  --board: #1A1721;         /* the page background, like a chalkboard */
+  --card-bg: #241F2E;       /* the main notebook card */
+  --card-bg-2: #2C2638;     /* boxes inside the card (inputs, answers) */
+
+  /* text colors */
+  --chalk: #F1EEF6;         /* main text, looks like white chalk */
+  --chalk-dim: #B3ABC2;     /* softer text, like faded chalk */
+  --muted: #7C7488;
+
+  /* the 4 "chalk colors", one per feature */
+  --yellow: #F2D675;  /* Explain */
+  --blue: #8FCBE0;    /* Quiz */
+  --coral: #F2938C;   /* Summarize */
+  --lavender: #C3B2E8; /* Career Advisor */
+  --green: #93D9A8;   /* used only for "correct answer" in the quiz */
 }
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
+
+/* reset some default browser spacing */
+* {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
 body{
-  background: var(--bg);
-  color: var(--ink);
+  background-color: var(--board);
+  color: var(--chalk);
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 40px 20px 80px;
+
+  /* This gives the background some texture instead of being flat.
+     Soft color glows (like chalk smudges), one per feature color,
+     plus a small repeating dot pattern (like a chalkboard has tiny
+     specks on it). */
   background-image:
-    radial-gradient(circle at 15% 0%, rgba(79,182,169,0.09), transparent 40%),
-    radial-gradient(circle at 90% 20%, rgba(244,201,93,0.08), transparent 35%);
+    radial-gradient(circle at 12% 8%, rgba(143, 203, 224, 0.09), transparent 40%),
+    radial-gradient(circle at 88% 18%, rgba(242, 214, 117, 0.07), transparent 40%),
+    radial-gradient(circle at 55% 92%, rgba(242, 147, 140, 0.06), transparent 35%),
+    radial-gradient(circle at 95% 70%, rgba(195, 178, 232, 0.08), transparent 38%),
+    radial-gradient(rgba(241, 238, 246, 0.09) 1px, transparent 1px);
+  background-size: auto, auto, auto, auto, 22px 22px;
 }
 
-.brand{
-  display:flex;
-  align-items:baseline;
-  gap:10px;
-  margin-bottom:6px;
-}
+/* small badge at the very top, just says "v1.0" */
 .brand-mark{
-  font-family:'JetBrains Mono', monospace;
-  font-size:13px;
-  letter-spacing:0.12em;
-  color: var(--amber);
-  border:1px solid rgba(244,201,93,0.35);
-  padding:3px 8px;
-  border-radius:6px;
-}
-h1{
-  font-family:'Fraunces', serif;
-  font-weight:600;
-  font-size:clamp(28px, 5vw, 40px);
-  margin:6px 0 6px;
-  letter-spacing:-0.01em;
-}
-.tagline{
-  color: var(--ink-dim);
-  font-size:15px;
-  margin-bottom:36px;
-  text-align:center;
-  max-width: 480px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--board);
+  background: var(--yellow);
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin: 0 0 10px 0;
 }
 
+/* main title, handwriting-style font to match the chalkboard look */
+h1{
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 52px;
+  margin: 4px 0 2px 0;
+  color: var(--chalk);
+  /* this makes a wavy line under the title, like chalk underlining */
+  text-decoration: underline wavy var(--yellow);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+
+.tagline{
+  color: var(--chalk-dim);
+  font-size: 15px;
+  margin-bottom: 26px;
+  text-align: center;
+  max-width: 460px;
+}
+
+/* ---------------------------------------------------
+   Quote of the day box — made to look like a sticky
+   note pinned on the board (yellow paper, small tape
+   strip on top, slightly rotated so it looks stuck on)
+   --------------------------------------------------- */
 .quote-banner{
-  max-width: 560px;
-  text-align:center;
-  font-family:'Fraunces', serif;
-  font-style:italic;
-  font-size:14.5px;
-  color: var(--ink-dim);
-  border-top: 1px solid rgba(255,255,255,0.08);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  padding: 12px 10px;
-  margin-bottom: 32px;
-  line-height:1.5;
+  position: relative;
+  max-width: 420px;
+  text-align: center;
+  font-family: 'Kalam', cursive;
+  font-size: 14.5px;
+  color: #362C1A; /* dark text because the sticky note background is light yellow */
+  background: var(--yellow);
+  padding: 22px 20px 18px 20px;
+  margin-bottom: 34px;
+  border-radius: 4px;
+  transform: rotate(-2deg);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.35);
+}
+/* the little "tape" strip at the top of the sticky note */
+.quote-banner::before{
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 60px;
+  height: 20px;
+  background: rgba(143, 203, 224, 0.6);
 }
 .quote-banner .quote-author{
-  display:block;
-  margin-top:4px;
-  font-style:normal;
-  font-family:'JetBrains Mono', monospace;
-  font-size:11.5px;
-  color: var(--teal);
+  display: block;
+  margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #4A3D22;
 }
-.quote-loading{ color: var(--muted); font-style:normal; font-family:'JetBrains Mono', monospace; font-size:12px; }
+.quote-loading{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #4A3D22;
+}
 
-.listen-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  margin-top:12px;
-  background: transparent;
-  border: 1px solid rgba(244,201,93,0.35);
-  color: var(--amber);
-  font-family:'Inter', sans-serif;
-  font-size:12.5px;
-  font-weight:600;
-  padding:7px 12px;
-  border-radius:8px;
-  cursor:pointer;
-  transition: background 0.15s ease;
-}
-.listen-btn:hover{ background: rgba(244,201,93,0.1); }
-.listen-btn:disabled{ opacity:0.5; cursor:not-allowed; }
-
-.wiki-card{
-  margin-top:14px;
-  background: rgba(79,182,169,0.06);
-  border: 1px solid rgba(79,182,169,0.2);
-  border-radius:10px;
-  padding:14px 16px;
-}
-.wiki-card .wiki-label{
-  font-family:'JetBrains Mono', monospace;
-  font-size:11px;
-  letter-spacing:0.05em;
-  color: var(--teal);
-  text-transform:uppercase;
-  margin-bottom:6px;
-  display:block;
-}
-.wiki-card p{
-  font-size:13.5px;
-  line-height:1.55;
-  margin: 0 0 8px;
-  color: var(--ink-dim);
-}
-.wiki-card a{
-  color: var(--amber);
-  font-size:12.5px;
-  text-decoration:none;
-  font-family:'JetBrains Mono', monospace;
-}
-.wiki-card a:hover{ text-decoration:underline; }
-
+/* ---------------------------------------------------
+   Main app card (the "notebook")
+   --------------------------------------------------- */
 .notebook{
-  width:100%;
-  max-width: 760px;
-  background: var(--card);
-  border-radius: var(--radius);
-  position:relative;
-  padding: 0 0 28px 0;
-  box-shadow: 0 30px 60px -25px rgba(0,0,0,0.55);
-  overflow:hidden;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-.notebook::before{
-  /* the notebook margin line, our signature element */
-  content:"";
-  position:absolute;
-  top:0; bottom:0; left:56px;
-  width:1px;
-  background: rgba(217,108,108,0.35);
-}
-.notebook::after{
-  content:"";
-  position:absolute;
-  top:0; left:0; right:0; height:100%;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent,
-    transparent 27px,
-    var(--rule) 28px
-  );
-  pointer-events:none;
-  opacity:0.6;
+  width: 100%;
+  max-width: 700px;
+  background: var(--card-bg);
+  border-radius: 14px;
+  padding-bottom: 26px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
 
+/* the 3 tab buttons at the top (Explain / Quiz / Summarize) */
 .tabs{
-  display:flex;
-  gap:2px;
-  padding: 22px 24px 0 76px;
-  position:relative;
-  z-index:2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 20px 20px 0 20px;
 }
 .tab{
-  font-family:'Inter', sans-serif;
-  font-size:14px;
-  font-weight:600;
+  font-family: 'Kalam', cursive;
+  font-weight: 700;
+  font-size: 14px;
   color: var(--muted);
-  background:none;
-  border:none;
-  padding:10px 14px 12px;
-  cursor:pointer;
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 8px 12px 10px 12px;
+  cursor: pointer;
 }
-.tab:hover{ color: var(--ink); }
-.tab.active{
-  color: var(--amber);
-  border-bottom-color: var(--amber);
+.tab:hover{
+  color: var(--chalk);
 }
+/* each tab gets its own color when it's the active one */
+.tab:nth-child(1).active{ color: var(--yellow); border-bottom-color: var(--yellow); }
+.tab:nth-child(2).active{ color: var(--blue);   border-bottom-color: var(--blue); }
+.tab:nth-child(3).active{ color: var(--coral);  border-bottom-color: var(--coral); }
+.tab:nth-child(4).active{ color: var(--lavender); border-bottom-color: var(--lavender); }
 
+/* only show the panel that matches the active tab */
 .panel{
-  display:none;
-  padding: 26px 28px 8px 76px;
-  position:relative;
-  z-index:2;
+  display: none;
+  padding: 24px 26px 6px 26px;
 }
-.panel.active{ display:block; }
+.panel.active{
+  display: block;
+}
 
 .panel h2{
-  font-family:'Fraunces', serif;
-  font-weight:600;
-  font-size:20px;
-  margin:0 0 6px;
+  font-family: 'Kalam', cursive;
+  font-size: 21px;
+  margin: 0 0 6px 0;
 }
+#panel-explain h2{ color: var(--yellow); }
+#panel-quiz h2{ color: var(--blue); }
+#panel-summarize h2{ color: var(--coral); }
+#panel-career h2{ color: var(--lavender); }
+
 .panel p.desc{
-  color: var(--ink-dim);
-  font-size:13.5px;
-  margin: 0 0 18px;
-  line-height:1.5;
+  color: var(--chalk-dim);
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
 }
 
+/* the little example buttons like "Modular exponentiation" */
 .chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-bottom:16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 .chip{
-  font-family:'JetBrains Mono', monospace;
-  font-size:12px;
-  color: var(--teal);
-  background: rgba(79,182,169,0.1);
-  border: 1px solid rgba(79,182,169,0.25);
-  padding:5px 10px;
-  border-radius:20px;
-  cursor:pointer;
-  transition: background 0.15s ease;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  cursor: pointer;
 }
-.chip:hover{ background: rgba(79,182,169,0.2); }
+/* give the 3 chips in each row different colors, just for variety */
+.chip:nth-child(3n+1){ color: var(--yellow); background: rgba(242,214,117,0.12); border: 1px solid rgba(242,214,117,0.3); }
+.chip:nth-child(3n+2){ color: var(--blue);   background: rgba(143,203,224,0.12); border: 1px solid rgba(143,203,224,0.3); }
+.chip:nth-child(3n+3){ color: var(--coral);  background: rgba(242,147,140,0.12); border: 1px solid rgba(242,147,140,0.3); }
+.chip:hover{
+  filter: brightness(1.2);
+}
 
+/* text input + textarea */
 input[type=text], textarea{
-  width:100%;
-  background: var(--card-raised);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: var(--ink);
-  font-family:'Inter', sans-serif;
-  font-size:14.5px;
-  padding:12px 14px;
-  border-radius:10px;
-  outline:none;
-  resize: vertical;
-  transition: border-color 0.15s ease;
+  width: 100%;
+  background: var(--card-bg-2);
+  border: 1px solid rgba(244,241,230,0.1);
+  color: var(--chalk);
+  font-family: 'Inter', sans-serif;
+  font-size: 14.5px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  outline: none;
 }
 input[type=text]:focus, textarea:focus{
-  border-color: var(--amber);
+  border-color: var(--yellow);
 }
-textarea{ min-height:110px; line-height:1.5; }
+textarea{
+  min-height: 100px;
+  resize: vertical;
+}
 
-.row{ display:flex; gap:10px; margin-top:2px; }
-.row input{ flex:1; }
+.row{
+  display: flex;
+  gap: 10px;
+}
+.row input{
+  flex: 1;
+}
 
+/* the main action button (Explain / Generate Quiz / Summarize) */
 button.go{
-  font-family:'Inter', sans-serif;
-  font-weight:600;
-  font-size:14px;
-  background: var(--amber);
-  color: #1B2430;
-  border:none;
-  padding:12px 20px;
-  border-radius:10px;
-  cursor:pointer;
-  white-space:nowrap;
-  transition: filter 0.15s ease, transform 0.1s ease;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  background: var(--yellow);
+  color: #1A1721;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  white-space: nowrap;
 }
-button.go:hover{ filter:brightness(1.08); }
-button.go:active{ transform: scale(0.98); }
-button.go:disabled{ opacity:0.5; cursor:not-allowed; }
+button.go:hover{
+  filter: brightness(1.08);
+}
+button.go:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* match the button color to whichever tab we're on */
+#panel-quiz button.go{ background: var(--blue); }
+#panel-summarize button.go{ background: var(--coral); }
+#panel-career button.go{ background: var(--lavender); }
 
 .output{
-  margin-top:20px;
-  min-height: 20px;
+  margin-top: 18px;
 }
+
+/* the "Thinking..." loading message with 3 bouncing dots */
 .loading{
   color: var(--muted);
-  font-family:'JetBrains Mono', monospace;
-  font-size:13px;
-  display:flex;
-  align-items:center;
-  gap:8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .dot{
-  width:6px; height:6px; border-radius:50%;
-  background: var(--amber);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--yellow);
   animation: pulse 1s infinite ease-in-out;
 }
-.dot:nth-child(2){ animation-delay:0.15s; }
-.dot:nth-child(3){ animation-delay:0.3s; }
-@keyframes pulse{ 0%,100%{opacity:0.25;} 50%{opacity:1;} }
+.dot:nth-child(2){ animation-delay: 0.15s; }
+.dot:nth-child(3){ animation-delay: 0.3s; }
+@keyframes pulse{
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 1; }
+}
 
+/* the box that shows the AI's answer text */
 .answer-card{
-  background: var(--card-raised);
-  border-radius:10px;
-  padding:16px 18px;
-  font-size:14.5px;
-  line-height:1.65;
-  white-space:pre-wrap;
-  border-left: 3px solid var(--teal);
+  background: var(--card-bg-2);
+  border-radius: 10px;
+  padding: 20px 22px;
+  font-size: 15.5px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  border-left: 3px solid var(--yellow);
 }
-.error{
-  color: var(--margin-red);
-  font-size:13.5px;
-  font-family:'JetBrains Mono', monospace;
+#panel-quiz .answer-card{ border-left-color: var(--blue); }
+#panel-summarize .answer-card{ border-left-color: var(--coral); }
+#panel-career .answer-card{ border-left-color: var(--lavender); }
+
+/* the topic picture that shows up above an explanation, pulled from Wikipedia */
+.topic-image{
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  display: block;
 }
 
+.error{
+  color: var(--coral);
+  font-size: 13.5px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* the "Read Aloud" button */
+.listen-btn{
+  margin-bottom: 12px;
+  background: none;
+  border: 1px dashed rgba(242,214,117,0.5);
+  color: var(--yellow);
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-block;
+}
+.listen-btn:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* the "From Wikipedia" box that shows up under an explanation */
+.wiki-card{
+  margin-top: 14px;
+  background: rgba(143,203,224,0.08);
+  border: 1px solid rgba(143,203,224,0.25);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.wiki-card .wiki-label{
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--blue);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.wiki-card p{
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--chalk-dim);
+  margin: 0 0 8px 0;
+}
+.wiki-card a{
+  color: var(--yellow);
+  font-size: 12.5px;
+  font-family: 'JetBrains Mono', monospace;
+  text-decoration: none;
+}
+.wiki-card a:hover{
+  text-decoration: underline;
+}
+
+/* one quiz question box */
 .quiz-q{
-  background: var(--card-raised);
-  border-radius:10px;
-  padding:16px 18px;
-  margin-bottom:12px;
+  background: var(--card-bg-2);
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  border-left: 3px solid var(--blue);
 }
-.quiz-q .qtext{ font-weight:600; margin-bottom:10px; font-size:14.5px; }
+.quiz-q .qtext{
+  font-family: 'Kalam', cursive;
+  font-weight: 700;
+  font-size: 14.5px;
+  margin-bottom: 10px;
+}
+/* one answer option button inside a quiz question */
 .quiz-opt{
-  display:block;
-  width:100%;
-  text-align:left;
-  background:transparent;
-  border:1px solid rgba(255,255,255,0.1);
-  color: var(--ink-dim);
-  padding:9px 12px;
-  border-radius:8px;
-  margin-bottom:6px;
-  font-size:13.5px;
-  cursor:pointer;
-  font-family:'Inter', sans-serif;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 1px solid rgba(244,241,230,0.15);
+  color: var(--chalk-dim);
+  padding: 9px 12px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 13.5px;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
 }
-.quiz-opt:hover{ border-color: var(--amber); color: var(--ink); }
-.quiz-opt.correct{ border-color: var(--teal); color: var(--teal); background: rgba(79,182,169,0.08); }
-.quiz-opt.wrong{ border-color: var(--margin-red); color: var(--margin-red); background: rgba(217,108,108,0.08); }
+.quiz-opt:hover{
+  border-color: var(--yellow);
+  color: var(--chalk);
+}
+/* after you click an answer, we add "correct" or "wrong" as a class */
+.quiz-opt.correct{
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(147,217,168,0.1);
+}
+.quiz-opt.correct::after{ content: " ✓"; }
+.quiz-opt.wrong{
+  border-color: var(--coral);
+  color: var(--coral);
+  background: rgba(242,147,140,0.1);
+}
+.quiz-opt.wrong::after{ content: " ✗"; }
 
 footer{
-  margin-top:28px;
+  margin-top: 26px;
   color: var(--muted);
-  font-size:12px;
-  font-family:'JetBrains Mono', monospace;
-  text-align:center;
+  font-size: 11.5px;
+  font-family: 'JetBrains Mono', monospace;
+  text-align: center;
 }
 
-@media (max-width:560px){
-  .notebook::before{ left:32px; }
-  .tabs{ padding-left:40px; gap:0; overflow-x:auto; }
-  .panel{ padding-left:40px; padding-right:18px; }
-  .row{ flex-direction:column; }
+/* make it usable on small phone screens too */
+@media (max-width: 560px){
+  .row{ flex-direction: column; }
+}
+
+
+/* =========================================================
+   Sidebars — Study Planner (left) and Brain Break + Links (right)
+   These only show up on wide screens. On smaller screens there's
+   no empty space to fill, so we just hide them and show the
+   notebook by itself, centered like before.
+   ========================================================= */
+
+.page-wrap{
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 22px;
+  width: 100%;
+  max-width: 1160px;
+}
+
+.sidebar{
+  width: 230px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* only show the sidebars when there's actually room for them */
+@media (max-width: 1100px){
+  .sidebar{ display: none; }
+}
+
+.widget{
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 16px 16px 18px 16px;
+  box-shadow: 0 14px 26px rgba(0,0,0,0.35);
+}
+.widget h3{
+  font-family: 'Kalam', cursive;
+  font-size: 16.5px;
+  margin: 0 0 4px 0;
+}
+.widget-desc{
+  color: var(--chalk-dim);
+  font-size: 12px;
+  line-height: 1.4;
+  margin: 0 0 12px 0;
+}
+
+/* ---------- Study Planner widget ---------- */
+.planner-row{
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.planner-row input{
+  flex: 1;
+  background: var(--card-bg-2);
+  border: 1px solid rgba(244,241,230,0.1);
+  color: var(--chalk);
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  outline: none;
+}
+.planner-row input:focus{
+  border-color: var(--yellow);
+}
+.planner-row button{
+  background: var(--yellow);
+  color: #1A1721;
+  border: none;
+  width: 32px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.planner-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.planner-item{
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: var(--card-bg-2);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.planner-item input[type=checkbox]{
+  margin-top: 2px;
+  accent-color: var(--yellow);
+  cursor: pointer;
+}
+.planner-item .task-text{
+  flex: 1;
+  word-break: break-word;
+}
+.planner-item.done .task-text{
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.planner-item .delete-btn{
+  background: none;
+  border: none;
+  color: var(--coral);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+}
+.planner-empty{
+  color: var(--muted);
+  font-size: 12px;
+  font-style: italic;
+}
+
+/* ---------- Brain Break memory game widget ---------- */
+.memory-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.memory-card{
+  aspect-ratio: 1;
+  background: var(--card-bg-2);
+  border: 1px solid rgba(244,241,230,0.12);
+  border-radius: 8px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.memory-card.flipped{
+  background: rgba(242,214,117,0.15);
+  border-color: var(--yellow);
+}
+.memory-card.matched{
+  background: rgba(147,217,168,0.15);
+  border-color: var(--green);
+  cursor: default;
+}
+.memory-status{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--chalk-dim);
+  margin: 0 0 10px 0;
+}
+.mini-btn{
+  width: 100%;
+  background: none;
+  border: 1px dashed rgba(244,241,230,0.3);
+  color: var(--chalk-dim);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.mini-btn:hover{
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+
+/* ---------- Useful Links widget ---------- */
+.link-card{
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  background: var(--card-bg-2);
+}
+.link-card:hover{
+  background: rgba(242,214,117,0.1);
+}
+.link-emoji{
+  font-size: 20px;
+  line-height: 1;
+}
+.link-text{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--chalk-dim);
+}
+.link-text strong{
+  font-size: 13px;
+  color: var(--chalk);
+  font-family: 'Kalam', cursive;
 }
