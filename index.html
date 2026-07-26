@@ -19,8 +19,23 @@
 </head>
 <body>
 
+  <!-- These 8 empty spans are just the floating bubbles in the background.
+       They don't have any content — CSS gives each one a size, color,
+       position, and a slow floating animation. -->
+  <div class="bubbles" aria-hidden="true">
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+    <span class="bubble"></span>
+  </div>
+
+
   <!-- Page header -->
-  <p class="brand-mark">v1.0</p>
+  <!-- <p class="brand-mark">v1.0</p> -->
   <h1>StudyMate AI</h1>
   <p class="tagline">
     Explain a concept, generate a practice quiz, or summarize your notes — powered by AI, built for students.
@@ -190,7 +205,7 @@
 
   </div>
 
-  <footer>Built with Puter.js — no API keys, no backend needed</footer>
+  <!-- <footer>Built with Puter.js — no API keys, no backend needed</footer> -->
 
   <script src="script.js"></script>
 </body>
